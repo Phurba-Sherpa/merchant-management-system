@@ -7,9 +7,11 @@ import configuration from './config/configuration';
 import { envValidationSchema } from './config/env.validation';
 import { createPinoHttpConfig } from './config/logger.config';
 import { HealthModule } from './health/health.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
