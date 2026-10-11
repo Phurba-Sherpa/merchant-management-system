@@ -1,13 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+import { Server } from 'node:http';
 
-  beforeEach(async () => {
+describe('HealthController (e2e)', () => {
+  let app: INestApplication;
+
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -16,14 +17,20 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  afterAll(async () => {
+    await app.close();
   });
 
-  afterEach(async () => {
-    await app.close();
+  it('/health (GET) returns 200 and healthy status for postgres and redis', async () => {
+    const server = app.getHttpServer() as unknown as Server;
+    const response = await request(server).get('/health').expect(200);
+
+    expect(response.body).toEqual({
+      status: 'ok',
+      info: {
+        postgres: 'up',
+        redis: 'up',
+      },
+    });
   });
 });
