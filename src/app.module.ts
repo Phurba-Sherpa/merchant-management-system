@@ -8,10 +8,14 @@ import { envValidationSchema } from './config/env.validation';
 import { createPinoHttpConfig } from './config/logger.config';
 import { HealthModule } from './health/health.module';
 import { DatabaseModule } from './database/database.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     DatabaseModule,
+    UsersModule,
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
