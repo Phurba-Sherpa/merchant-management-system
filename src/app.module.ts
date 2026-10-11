@@ -35,9 +35,8 @@ import { AuthModule } from './auth/auth.module';
         {
           name: 'default',
           ttl: (configService.get<number>('throttler.ttl') ?? 60) * 1000,
-          limit: configService.get<boolean>('throttler.enabled')
-            ? (configService.get<number>('throttler.limit') ?? 100)
-            : 100000,
+          limit: configService.get<number>('throttler.limit') ?? 100,
+          skipIf: () => !configService.get<boolean>('throttler.enabled'),
         },
       ],
     }),
