@@ -7,10 +7,12 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { DomainException } from '../errors/domain.exception';
 
 export interface ErrorResponsePayload {
   statusCode: number;
   error: string;
+  code?: string;
   message: string | string[];
   path: string;
   timestamp: string;
@@ -28,8 +30,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let statusCode: number;
     let error: string;
     let message: string | string[];
+    let code: string | undefined;
 
-    if (exception instanceof HttpException) {
+    if (exception instanceof DomainException) {
+      statusCode = exception.httpStatus;
+      code = exception.code;
+      error = HttpStatus[statusCode] ?? 'Error';
+      message = exception.message;
+    } else if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
       const res = exception.getResponse();
 
@@ -38,6 +46,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         message = (resObj['message'] as string | string[]) ?? exception.message;
         error =
           (resObj['error'] as string) ?? HttpStatus[statusCode] ?? 'Error';
+        code = resObj['code'] as string | undefined;
       } else {
         message = typeof res === 'string' ? res : exception.message;
         error = HttpStatus[statusCode] ?? 'Error';
@@ -69,6 +78,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const payload: ErrorResponsePayload = {
       statusCode,
       error,
+      ...(code ? { code } : {}),
       message,
       path: request?.url ?? '',
       timestamp: new Date().toISOString(),

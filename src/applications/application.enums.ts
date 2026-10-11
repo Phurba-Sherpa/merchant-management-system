@@ -1,0 +1,43 @@
+export enum ApplicationStatus {
+  DRAFT = 'DRAFT',
+  SUBMITTED = 'SUBMITTED',
+  IN_REVIEW = 'IN_REVIEW',
+  NEEDS_INFO = 'NEEDS_INFO',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
+export enum RiskStatus {
+  NOT_STARTED = 'NOT_STARTED',
+  PENDING = 'PENDING',
+  CLEAR = 'CLEAR',
+  FLAGGED = 'FLAGGED',
+  FAILED = 'FAILED',
+}
+
+export enum BusinessType {
+  SOLE_PROPRIETORSHIP = 'SOLE_PROPRIETORSHIP',
+  PARTNERSHIP = 'PARTNERSHIP',
+  LLC = 'LLC',
+  CORPORATION = 'CORPORATION',
+  NON_PROFIT = 'NON_PROFIT',
+}
+
+export enum RiskReviewStatus {
+  PENDING = 'PENDING',
+  PROCESSING = 'PROCESSING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+}
+
+export enum RiskLevel {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+}
+
+export enum DecisionType {
+  APPROVE = 'APPROVE',
+  REJECT = 'REJECT',
+  REQUEST_INFO = 'REQUEST_INFO',
+}

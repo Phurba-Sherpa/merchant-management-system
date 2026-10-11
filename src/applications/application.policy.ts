@@ -6,8 +6,12 @@ export interface ApplicationResource {
   id?: string;
   createdById: string;
   assignedReviewerId?: string | null;
-  [key: string]: unknown;
 }
+
+export type DecidableApplication = {
+  assignedReviewerId?: string | null;
+  [key: string]: any;
+};
 
 export class ApplicationPolicy {
   /**
@@ -16,8 +20,7 @@ export class ApplicationPolicy {
    */
   canView(
     actor: AuthenticatedUser,
-    application: Pick<ApplicationResource, 'createdById'> &
-      Record<string, unknown>,
+    application: { createdById: string },
   ): boolean {
     if (actor.role === Role.ADMIN || actor.role === Role.REVIEWER) {
       return true;
@@ -43,8 +46,7 @@ export class ApplicationPolicy {
    */
   canEdit(
     actor: AuthenticatedUser,
-    application: Pick<ApplicationResource, 'createdById'> &
-      Record<string, unknown>,
+    application: { createdById: string },
   ): boolean {
     if (actor.role === Role.ADMIN) {
       return true;
@@ -62,8 +64,7 @@ export class ApplicationPolicy {
    */
   canSubmit(
     actor: AuthenticatedUser,
-    application: Pick<ApplicationResource, 'createdById'> &
-      Record<string, unknown>,
+    application: { createdById: string },
   ): boolean {
     if (actor.role === Role.ADMIN) {
       return true;
@@ -88,7 +89,7 @@ export class ApplicationPolicy {
    */
   canDecide(
     actor: AuthenticatedUser,
-    application: { assignedReviewerId?: string | null; [key: string]: unknown },
+    application: DecidableApplication,
   ): boolean {
     if (actor.role === Role.REVIEWER) {
       return Boolean(
@@ -102,7 +103,7 @@ export class ApplicationPolicy {
   /**
    * Scopes queries at database level so SALES never load other users' applications.
    */
-  applyVisibilityScope<T extends Record<string, unknown>>(
+  applyVisibilityScope<T extends { createdById?: string }>(
     queryBuilder: SelectQueryBuilder<T>,
     actor: AuthenticatedUser,
     alias = 'application',
