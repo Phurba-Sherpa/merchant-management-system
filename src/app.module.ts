@@ -10,12 +10,27 @@ import { HealthModule } from './health/health.module';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
     DatabaseModule,
     UsersModule,
     AuthModule,
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          host: configService.get<string>('redis.host') ?? 'localhost',
+          port: configService.get<number>('redis.port') ?? 6379,
+        },
+        prefix:
+          configService.get<string>('env') === 'test' ? 'bull-test' : 'bull',
+      }),
+    }),
+    BullModule.registerQueue({
+      name: 'risk-review',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
