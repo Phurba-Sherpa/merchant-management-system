@@ -10,6 +10,9 @@ import { HealthModule } from './health/health.module';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { AuditModule } from './audit/audit.module';
+import { RiskModule } from './risk/risk.module';
+import { ApplicationsModule } from './applications/applications.module';
 import { BullModule } from '@nestjs/bullmq';
 
 @Module({
@@ -17,6 +20,9 @@ import { BullModule } from '@nestjs/bullmq';
     DatabaseModule,
     UsersModule,
     AuthModule,
+    AuditModule,
+    RiskModule,
+    ApplicationsModule,
     BullModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
