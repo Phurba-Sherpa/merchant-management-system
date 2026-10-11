@@ -12,6 +12,7 @@ export interface TestAppContext {
 
 export async function createTestApp(): Promise<TestAppContext> {
   process.env.NODE_ENV = 'test';
+  process.env.THROTTLE_ENABLED = 'false';
   const moduleFixture = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
