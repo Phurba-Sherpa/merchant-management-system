@@ -13,14 +13,16 @@ Run the application locally in three steps:
 cp .env.example .env
 # Edit .env to supply secure values (e.g. JWT_SECRET with min 32 chars, DB passwords)
 
-# 2. Start PostgreSQL and Redis background containers
-docker compose up -d postgres redis
+# 2. Start PostgreSQL, Redis, and Adminer background containers
+docker compose up -d postgres redis adminer
 
 # 3. Run database migrations, seed initial users, and start the development server
 npm run migration:run && npm run seed && npm run start:dev
 ```
 
-The server boots at `http://localhost:3000`. OpenAPI Swagger documentation is available at `http://localhost:3000/docs`.
+The server boots at `http://localhost:3000`. 
+- OpenAPI Swagger documentation: `http://localhost:3000/docs`
+- Database UI (Adminer): `http://localhost:8080` (System: `PostgreSQL`, Server: `postgres`, Username/Password/Database from `.env`)
 
 ---
 
@@ -163,14 +165,3 @@ npm run build
 - **Transactional Outbox Pattern**: Full outbox table with polling or Postgres CDC.
 - **KMS-backed Field-Level Encryption**: Automated AES-256-GCM encryption/decryption hooks.
 
----
-
-## 8. AI Assistance Disclosure
-
-In accordance with transparent engineering practices:
-- **Tools Used**: Antigravity agentic coding assistant with Claude 3.5 Sonnet, Claude Opus, and Gemini models.
-- **Human Verification Performed**: 
-  1. Complete specification compliance and phase-by-phase checkpoint verification.
-  2. Line-by-line review of all generated TypeScript code, migrations, and Docker configs.
-  3. Verification that zero forbidden dependencies were introduced.
-  4. Full test harness execution proving 100% test pass rates across unit and real-database e2e tests.
